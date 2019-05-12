@@ -45,7 +45,6 @@ pid_t pid, sid;
   close(STDOUT_FILENO);
   close(STDERR_FILENO);
 
-  pthread_t thread[100];
 ```
 
 ##### 2. Mengecek waktu sekarang
@@ -88,6 +87,7 @@ char isi[1000];
       char command_dijalankan[1000];
       if(check(tm,isi,command_dijalankan)){
         // printf("%s\n",command_dijalankan);
+	strcpy(command_tiap_thread[i],command_dijalankan);
         int iret = pthread_create( &thread[i], NULL, print_message_function, (void*) command_dijalankan);
         i++;
       }
@@ -99,7 +99,7 @@ char isi[1000];
     }
     fclose(fp);
 ```
-Program di atas akan mengambil isi dari file crontab.data dan mengeceknya dalam 1 baris. Jika isi dari file crontab.data sama dengan waktu sekarang maka command yang ada dalam file crontab.data akan di jalankan. Selanjutknya semua thread akan dibuat, setelah semua thread terbuat thread tersebut akan di join.
+Program di atas akan mengambil isi dari file crontab.data dan mengeceknya dalam 1 baris. Jika isi dari file crontab.data sama dengan waktu sekarang maka command yang ada dalam file crontab.data akan di simpan pada sebuah daftar command untuk dijalankan thread nantinya. Selanjutknya semua thread akan dibuat, setelah semua thread terbuat thread tersebut akan di join.
 
 ##### 5. Memset
 
@@ -162,11 +162,13 @@ Memisahkan format waktu dan command. Misal ``* * * * * cp /home/yasinta/music /h
  ```c
  void *print_message_function( void *ptr )
 {
-    char *message;
-    message = (char *) ptr;
     // printf("%s\n",message);
-    system(message);
+    pthread_t thread_ini = pthread_self();
+    // cari thread yang sama
+    int i=0;
+    while(thread_ini!=thread[i]) i++; //cari hingga thread yang sama
+    system(command_tiap_thread[i]);
     pthread_exit(NULL);
 }
  ```
- Fungsi ini dipanggil pada thread yang dibuat. Yang berfungsi untuk menjalankan command.
+ Fungsi ini dipanggil pada thread yang dibuat. Yang berfungsi untuk menjalankan command. Dengan cara mencari mana thread yang sama dengan thread yang sedang berjalan, sehingga apabila thread sekarang (thread_ini) adalah thread ke 5 (thread[4]) maka, thread tersebut akan menjalankan command ke -4 yang terletak pada command_tiap_thread[4].
