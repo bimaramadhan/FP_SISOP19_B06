@@ -171,4 +171,4 @@ Memisahkan format waktu dan command. Misal ``* * * * * cp /home/yasinta/music /h
     pthread_exit(NULL);
 }
  ```
- Fungsi ini dipanggil pada thread yang dibuat. Yang berfungsi untuk menjalankan command. Dengan cara mencari mana thread yang sama dengan thread yang sedang berjalan, sehingga apabila thread sekarang (thread_ini) adalah thread ke 5 (thread[4]) maka, thread tersebut akan menjalankan command ke -4 yang terletak pada command_tiap_thread[4].
+ Fungsi ini dipanggil pada thread yang dibuat. Yang berfungsi untuk menjalankan command. Dengan cara mencari mana thread yang sama dengan thread yang sedang berjalan, sehingga apabila thread sekarang (thread_ini) adalah thread ke 5 (thread[4]) maka, thread tersebut akan menjalankan command ke -5 yang terletak pada command_tiap_thread[4].
