@@ -57,12 +57,16 @@ int check(struct tm tm, char* buffer, char* cmd){
   return flag;
 }
 
+pthread_t thread[100];
+char command_tiap_thread[100][1000];
 void *print_message_function( void *ptr )
 {
-    char *message;
-    message = (char *) ptr;
     // printf("%s\n",message);
-    system(message);
+    pthread_t thread_ini = pthread_self();
+    // cari thread yang sama
+    int i=0;
+    while(thread_ini!=thread[i]) i++; //cari hingga thread yang sama
+    system(command_tiap_thread[i]);
     pthread_exit(NULL);
 }
 
@@ -96,8 +100,6 @@ int main() {
   close(STDOUT_FILENO);
   close(STDERR_FILENO);
 
-  pthread_t thread[100];
-
   while(1) {
     
     // ngambil waktu sekarang
@@ -127,6 +129,7 @@ int main() {
       char command_dijalankan[1000];
       if(check(tm,isi,command_dijalankan)){
         // printf("%s\n",command_dijalankan);
+	strcpy(command_tiap_thread[i],command_dijalankan);
         int iret = pthread_create( &thread[i], NULL, print_message_function, (void*) command_dijalankan);
         i++;
       }
