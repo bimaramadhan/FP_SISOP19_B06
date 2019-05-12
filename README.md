@@ -9,7 +9,7 @@ Buatlah program C yang menyerupai crontab menggunakan daemon dan thread. Ada seb
 
 #### Jawaban
 Dalam program yang kami buat terdapat 3 fungsi :
-1. Main (Membuat daemon dan membaca crontab.data)
++ Main Membuat daemon dan membaca crontab.data
 2. Cek (Mengecek apakah waktu yang ada di crontab.data sama dengan waktu sekarang dan memisah antara format waktu dengan command)
 3. Run (karena kami hanya copast di modul nama fungsi di programnya adalah **print_message_function**)
 
