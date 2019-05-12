@@ -9,12 +9,12 @@ Buatlah program C yang menyerupai crontab menggunakan daemon dan thread. Ada seb
 
 #### Jawaban
 Dalam program yang kami buat terdapat 3 fungsi :
-+ Main Membuat daemon dan membaca crontab.data
+1. Main Membuat daemon dan membaca crontab.data
 2. Cek (Mengecek apakah waktu yang ada di crontab.data sama dengan waktu sekarang dan memisah antara format waktu dengan command)
 3. Run (karena kami hanya copast di modul nama fungsi di programnya adalah **print_message_function**)
 
-##### Penjelasan Program
-1. Daemon
+#### Penjelasan Program
+##### 1. Daemon
 
 ```c
 pid_t pid, sid;
@@ -48,7 +48,7 @@ pid_t pid, sid;
   pthread_t thread[100];
 ```
 
-2. Mengecek waktu sekarang
+##### 2. Mengecek waktu sekarang
 
 ```c
     time_t t=time(NULL);
@@ -62,7 +62,7 @@ pid_t pid, sid;
 ```
 Waktu diambil menggunakan fungsi localtime yang disimpan pada struct tm. Setiap menit, jam, tanggal, bulan dan hari masing-masing disimpan pada variable tersendiri.
 
-3. Membuka file crontab.data
+##### 3. Membuka file crontab.data
 
 ```c
 FILE *fp;
@@ -78,7 +78,7 @@ FILE *fp;
 ```
 Digunakan untuk membuka file crontab.data dalam hal ini file crontab.data tersimpan di /home/yasinta/crontab.data. Dan jika file crontab.data belum ada akan mengeluarkan pesan error.
 
-4. Membuat thread dan memangsil fungsi check
+##### 4. Membuat thread dan memangsil fungsi check
 
 ```c
 char isi[1000];
@@ -101,7 +101,7 @@ char isi[1000];
 ```
 Program di atas akan mengambil isi dari file crontab.data dan mengeceknya dalam 1 baris. Jika isi dari file crontab.data sama dengan waktu sekarang maka command yang ada dalam file crontab.data akan di jalankan. Selanjutknya semua thread akan dibuat, setelah semua thread terbuat thread tersebut akan di join.
 
-5. Memset
+##### 5. Memset
 
 ```c
 char space[6][4];
@@ -113,7 +113,7 @@ char space[6][4];
 ```
 Berguna untuk mengosongkan array yang nanti akan di isi oleh file crontab.data
 
-6. Memisah space berdasarkan format crontab
+##### 6. Memisah space berdasarkan format crontab
 ```c
 int counter = 0;
   int digit = 0;
@@ -134,7 +134,7 @@ int counter = 0;
 ```
 Memisahkan format waktu dan command. Misal ``* * * * * cp /home/yasinta/music /home/yasinta/baru`` menjadi ``* * * * *`` yang disimpan pada variable space dan ``cp /home/yasinta/music /home/yasinta/baru`` yang disimpan pada variable command_dijalankan yang terdapat pada fungsi main program.
 
-7. Cek waktu sekarang dengan isi crontab.data
+##### 7. Cek waktu sekarang dengan isi crontab.data
 
 ```c
  char menit[3]; char jam[3]; char tanggal[3]; char bulan[3]; char hari[3];
@@ -157,7 +157,7 @@ Memisahkan format waktu dan command. Misal ``* * * * * cp /home/yasinta/music /h
  ```
  setiap waktu yang ada pada struct tm akan di simpan pada variable menit, jam, tanggal, bulan dan hari yang berupa string. Dimana jika waktu nya di file crontab.data berbeda dengan waktu sekarang dan bukan merupakan * makan return false yang artinya bukan waktunya. Namun akan return true jika merupakan waktu eksekusi crontab.
  
- 8. Menjalankan Command
+ ##### 8. Menjalankan Command
  
  ```c
  void *print_message_function( void *ptr )
